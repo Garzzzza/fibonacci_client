@@ -7,6 +7,10 @@
     {
       "src": "index.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "fibonacciServerConfig.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
