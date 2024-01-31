@@ -11,6 +11,6 @@
   "dependencies": {
     "dotenv": "*",
     "dotenv-webpack": "*",
-    "nodemon": "^3.0.3"
+    "vercel": "*"
   }
 }
