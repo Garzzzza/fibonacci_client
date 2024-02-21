@@ -98,13 +98,13 @@ addEventListener("load", fibList);
 
 async function calculate() {
   if (grabInput.value <= 50 && grabInput.value > -1) {
-    await showSpinner();
-    await serverCalculator();
-    await hideAlert();
+    showSpinner();
+    serverCalculator();
+    hideAlert();
   } else {
-    await showAlert();
+    showAlert();
   }
-  await fibList();
+  fibList();
 }
 grabButton.addEventListener("click", calculate);
 
