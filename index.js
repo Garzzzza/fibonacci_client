@@ -51,78 +51,60 @@ function hideError() {
   grabOutput.removeAttribute("class");
   grabOutput.setAttribute("class", "border-bottom fibonacciNumber");
 }
-function localCalculator(n) {
-  const fib = [0, 1];
-  for (let i = 2; i <= n; i++) {
-    fib[i] = fib[i - 1] + fib[i - 2];
+
+async function serverCalculator() {
+  try {
+    const response = await axios.get(
+      config.API_ENDPOINT + "fibonacci/" + grabInput.value
+    );
+    grabOutput.textContent = response.data.result;
+    hideError();
+  } catch (error) {
+    console.log(error);
+    showError(error);
+  } finally {
+    hideSpinner();
   }
-  return fib[n];
 }
-function serverCalculator() {
-  fetch(config.API_ENDPOINT + "fibonacci/" + grabInput.value)
-    .then(function (response) {
-      if (response.ok) {
-        response.json().then(function (data) {
-          grabOutput.textContent = data.result;
-          hideError();
-        });
-      } else {
-        response.text().then(function (errorText) {
-          showError(errorText);
-        });
-      }
-    })
-    .catch((error) => {
-      console.log("ERROR " + error);
-    })
-    .finally(() => {
-      hideSpinner();
-    });
-}
-function fibList() {
-  fetch(config.API_ENDPOINT + "getFibonacciResults")
-    .then(function (response) {
-      if (response.ok) {
-        showSpinny();
-        response.json().then(function (data) {
-          let list = data.results;
-          let html = "";
-          for (let i = list.length - 6; i < list.length; i++) {
-            html +=
-              ` <p class="my-2  border-dark border-bottom">
-The Fibonnaci Of <span class="fw-bold">` +
-              list[i].number +
-              `</span> is <span class="fw-bold">` +
-              list[i].result +
-              `</span>. Calculated at: ` +
-              new Date(list[i].createdDate) +
-              `
-</p>`;
-          }
-          listFib.innerHTML = html;
-        });
-      }
-    })
-    .finally(() => {
-      hideSpinny();
-    });
-}
-addEventListener("load", fibList);
-function calculate() {
-  if (grabInput.value <= 50 && grabInput.value > -1) {
-    showSpinner();
-    hideAlert();
-    if (checkBox.checked == true) {
-      serverCalculator();
-      hideAlert();
-    } else {
-      grabOutput.textContent = localCalculator(grabInput.value);
-      hideSpinner();
+
+async function fibList() {
+  try {
+    const response = await axios.get(
+      config.API_ENDPOINT + "getFibonacciOutcomes"
+    );
+    showSpinny();
+    console.log(response.data);
+    let list = response.data;
+    let html = "";
+    for (let i = list.length - 6; i < list.length; i++) {
+      html +=
+        ` <p class="my-2  border-dark border-bottom"> The Fibonnaci Of <span class="fw-bold">` +
+        list[i].number +
+        `</span> is <span class="fw-bold">` +
+        list[i].result +
+        `</span>. Calculated at: ` +
+        new Date(list[i].createdDate) +
+        `</p>`;
     }
-  } else {
-    showAlert();
+    listFib.innerHTML = html;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    hideSpinny();
   }
-  fibList();
+}
+
+addEventListener("load", fibList);
+
+async function calculate() {
+  if (grabInput.value <= 50 && grabInput.value > -1) {
+    await showSpinner();
+    await serverCalculator();
+    await hideAlert();
+  } else {
+    await showAlert();
+  }
+  await fibList();
 }
 grabButton.addEventListener("click", calculate);
 
@@ -133,28 +115,30 @@ function numberAsc(a, b) {
     return -1;
   }
 }
-function dropdown1() {
-  fetch(config.API_ENDPOINT + "getFibonacciResults").then(function (response) {
-    if (response.ok) {
-      response.json().then(function (data) {
-        let list = data.results.sort(numberAsc);
-        let html = "";
-        for (let i = 0; i < 6; i++) {
-          html +=
-            ` <p class="my-2">
+
+async function dropdown1() {
+  try {
+    const response = await axios.get(
+      config.API_ENDPOINT + "getFibonacciOutcomes"
+    );
+    let list = response.data.sort(numberAsc);
+    let html = "";
+    for (let i = 0; i < 6; i++) {
+      html +=
+        ` <p class="my-2">
 The Fibonnaci Of <span class="fw-bold">` +
-            list[i].number +
-            `</span> is <span class="fw-bold">` +
-            list[i].result +
-            `</span>. Calculated at: ` +
-            new Date(list[i].createdDate) +
-            `
+        list[i].number +
+        `</span> is <span class="fw-bold">` +
+        list[i].result +
+        `</span>. Calculated at: ` +
+        new Date(list[i].createdDate) +
+        `
 </p>`;
-        }
-        listFib.innerHTML = html;
-      });
     }
-  });
+    listFib.innerHTML = html;
+  } catch (error) {
+    console.log(error);
+  }
 }
 dropDown1.addEventListener("click", dropdown1);
 function numberDesc(a, b) {
@@ -164,28 +148,24 @@ function numberDesc(a, b) {
     return 1;
   }
 }
-function dropdown2() {
-  fetch(config.API_ENDPOINT + "getFibonacciResults").then(function (response) {
-    if (response.ok) {
-      response.json().then(function (data) {
-        let list = data.results.sort(numberDesc);
-        let html = "";
-        for (let i = 0; i < 6; i++) {
-          html +=
-            ` <p class="my-2">
-The Fibonnaci Of <span class="fw-bold">` +
-            list[i].number +
-            `</span> is <span class="fw-bold">` +
-            list[i].result +
-            `</span>. Calculated at: ` +
-            new Date(list[i].createdDate) +
-            `
-</p>`;
-        }
-        listFib.innerHTML = html;
-      });
-    }
-  });
+async function dropdown2() {
+  const response = await axios.get(
+    config.API_ENDPOINT + "getFibonacciOutcomes"
+  );
+
+  let list = response.data.sort(numberDesc);
+  let html = "";
+  for (let i = 0; i < 6; i++) {
+    html +=
+      ` <p class="my-2"> The Fibonnaci Of <span class="fw-bold">` +
+      list[i].number +
+      `</span> is <span class="fw-bold">` +
+      list[i].result +
+      `</span>. Calculated at: ` +
+      new Date(list[i].createdDate) +
+      `</p>`;
+  }
+  listFib.innerHTML = html;
 }
 dropDown2.addEventListener("click", dropdown2);
 function dateAsc(a, b) {
@@ -195,29 +175,25 @@ function dateAsc(a, b) {
     return -1;
   }
 }
-function dropdown3() {
-  fetch(config.API_ENDPOINT + "getFibonacciResults").then(function (response) {
-    if (response.ok) {
-      response.json().then(function (data) {
-        let list = data.results.sort(dateAsc);
-        let html = "";
-        for (let i = 0; i < 6; i++) {
-          html =
-            html +
-            ` <p class="my-2">
-The Fibonnaci Of <span class="fw-bold">` +
-            list[i].number +
-            `</span> is <span class="fw-bold">` +
-            list[i].result +
-            `</span>. Calculated at: ` +
-            new Date(list[i].createdDate) +
-            `
-</p>`;
-        }
-        listFib.innerHTML = html;
-      });
-    }
-  });
+async function dropdown3() {
+  const response = await axios.get(
+    config.API_ENDPOINT + "getFibonacciOutcomes"
+  );
+
+  let list = response.data.sort(dateAsc);
+  let html = "";
+  for (let i = 0; i < 6; i++) {
+    html =
+      html +
+      ` <p class="my-2"> The Fibonnaci Of <span class="fw-bold">` +
+      list[i].number +
+      `</span> is <span class="fw-bold">` +
+      list[i].result +
+      `</span>. Calculated at: ` +
+      new Date(list[i].createdDate) +
+      `</p>`;
+  }
+  listFib.innerHTML = html;
 }
 dropDown3.addEventListener("click", dropdown3);
 function dateDesc(a, b) {
@@ -227,28 +203,26 @@ function dateDesc(a, b) {
     return 1;
   }
 }
-function dropdown4() {
-  fetch(config.API_ENDPOINT + "getFibonacciResults").then(function (response) {
-    if (response.ok) {
-      response.json().then(function (data) {
-        let list = data.results.sort(dateDesc);
-        let html = "";
-        for (let i = 0; i < 6; i++) {
-          html =
-            html +
-            ` <p class="my-2">
+async function dropdown4() {
+  const response = await axios.get(
+    config.API_ENDPOINT + "getFibonacciOutcomes"
+  );
+
+  let list = response.data.sort(dateDesc);
+  let html = "";
+  for (let i = 0; i < 6; i++) {
+    html =
+      html +
+      ` <p class="my-2">
 The Fibonnaci Of <span class="fw-bold">` +
-            list[i].number +
-            `</span> is <span class="fw-bold">` +
-            list[i].result +
-            `</span>. Calculated at: ` +
-            new Date(list[i].createdDate) +
-            `
+      list[i].number +
+      `</span> is <span class="fw-bold">` +
+      list[i].result +
+      `</span>. Calculated at: ` +
+      new Date(list[i].createdDate) +
+      `
 </p>`;
-        }
-        listFib.innerHTML = html;
-      });
-    }
-  });
+  }
+  listFib.innerHTML = html;
 }
 dropDown4.addEventListener("click", dropdown4);
