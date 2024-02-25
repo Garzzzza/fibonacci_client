@@ -67,35 +67,6 @@ async function serverCalculator() {
   }
 }
 
-async function fibList() {
-  try {
-    const response = await axios.get(
-      config.API_ENDPOINT + "getFibonacciOutcomes"
-    );
-    showSpinny();
-    console.log(response.data);
-    let list = response.data;
-    let html = "";
-    for (let i = list.length - 6; i < list.length; i++) {
-      html +=
-        ` <p class="my-2  border-dark border-bottom"> The Fibonnaci Of <span class="fw-bold">` +
-        list[i].number +
-        `</span> is <span class="fw-bold">` +
-        list[i].result +
-        `</span>. Calculated at: ` +
-        new Date(list[i].createdDate) +
-        `</p>`;
-    }
-    listFib.innerHTML = html;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    hideSpinny();
-  }
-}
-
-addEventListener("load", fibList);
-
 async function calculate() {
   if (grabInput.value <= 50 && grabInput.value > -1) {
     showSpinner();
@@ -106,7 +77,32 @@ async function calculate() {
   }
   fibList();
 }
-grabButton.addEventListener("click", calculate);
+
+async function fibList(sortFunc) {
+  try {
+    const response = await axios.get(
+      config.API_ENDPOINT + "getFibonacciOutcomes"
+    );
+    showSpinny();
+    let list = response.data.sort(sortFunc);
+    let html = "";
+    for (let i = 0; i < 6; i++) {
+      html +=
+        ` <p class="my-2"> The Fibonnaci Of <span class="fw-bold">` +
+        list[i].number +
+        `</span> is <span class="fw-bold">` +
+        list[i].result +
+        `</span>. Calculated at: ` +
+        new Date(list[i].createdDate).toDateString() +
+        `</p>`;
+    }
+    listFib.innerHTML = html;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    hideSpinny();
+  }
+}
 
 function numberAsc(a, b) {
   if (a.number > b.number) {
@@ -116,31 +112,6 @@ function numberAsc(a, b) {
   }
 }
 
-async function dropdown1() {
-  try {
-    const response = await axios.get(
-      config.API_ENDPOINT + "getFibonacciOutcomes"
-    );
-    let list = response.data.sort(numberAsc);
-    let html = "";
-    for (let i = 0; i < 6; i++) {
-      html +=
-        ` <p class="my-2">
-The Fibonnaci Of <span class="fw-bold">` +
-        list[i].number +
-        `</span> is <span class="fw-bold">` +
-        list[i].result +
-        `</span>. Calculated at: ` +
-        new Date(list[i].createdDate) +
-        `
-</p>`;
-    }
-    listFib.innerHTML = html;
-  } catch (error) {
-    console.log(error);
-  }
-}
-dropDown1.addEventListener("click", dropdown1);
 function numberDesc(a, b) {
   if (a.number > b.number) {
     return -1;
@@ -148,26 +119,7 @@ function numberDesc(a, b) {
     return 1;
   }
 }
-async function dropdown2() {
-  const response = await axios.get(
-    config.API_ENDPOINT + "getFibonacciOutcomes"
-  );
 
-  let list = response.data.sort(numberDesc);
-  let html = "";
-  for (let i = 0; i < 6; i++) {
-    html +=
-      ` <p class="my-2"> The Fibonnaci Of <span class="fw-bold">` +
-      list[i].number +
-      `</span> is <span class="fw-bold">` +
-      list[i].result +
-      `</span>. Calculated at: ` +
-      new Date(list[i].createdDate) +
-      `</p>`;
-  }
-  listFib.innerHTML = html;
-}
-dropDown2.addEventListener("click", dropdown2);
 function dateAsc(a, b) {
   if (a.createdDate > b.createdDate) {
     return 1;
@@ -175,27 +127,7 @@ function dateAsc(a, b) {
     return -1;
   }
 }
-async function dropdown3() {
-  const response = await axios.get(
-    config.API_ENDPOINT + "getFibonacciOutcomes"
-  );
 
-  let list = response.data.sort(dateAsc);
-  let html = "";
-  for (let i = 0; i < 6; i++) {
-    html =
-      html +
-      ` <p class="my-2"> The Fibonnaci Of <span class="fw-bold">` +
-      list[i].number +
-      `</span> is <span class="fw-bold">` +
-      list[i].result +
-      `</span>. Calculated at: ` +
-      new Date(list[i].createdDate) +
-      `</p>`;
-  }
-  listFib.innerHTML = html;
-}
-dropDown3.addEventListener("click", dropdown3);
 function dateDesc(a, b) {
   if (a.createdDate > b.createdDate) {
     return -1;
@@ -203,26 +135,10 @@ function dateDesc(a, b) {
     return 1;
   }
 }
-async function dropdown4() {
-  const response = await axios.get(
-    config.API_ENDPOINT + "getFibonacciOutcomes"
-  );
 
-  let list = response.data.sort(dateDesc);
-  let html = "";
-  for (let i = 0; i < 6; i++) {
-    html =
-      html +
-      ` <p class="my-2">
-The Fibonnaci Of <span class="fw-bold">` +
-      list[i].number +
-      `</span> is <span class="fw-bold">` +
-      list[i].result +
-      `</span>. Calculated at: ` +
-      new Date(list[i].createdDate) +
-      `
-</p>`;
-  }
-  listFib.innerHTML = html;
-}
-dropDown4.addEventListener("click", dropdown4);
+addEventListener("load", () => fibList(dateDesc));
+grabButton.addEventListener("click", calculate);
+dropDown1.addEventListener("click", () => fibList(numberAsc));
+dropDown2.addEventListener("click", () => fibList(numberDesc));
+dropDown3.addEventListener("click", () => fibList(dateAsc));
+dropDown4.addEventListener("click", () => fibList(dateDesc));

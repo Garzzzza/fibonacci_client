@@ -11,9 +11,9 @@
 </head>
 
 <body>
-    <div class="container ">
-        <div class="container">
-            <h1 class="display-5 mt-2">Fibonacci Calculator</h1>
+    <div>
+        <div>
+            <h1>Fibonacci Calculator</h1>
             <div class="container d-flex align-items-start">
                 <span>The Fibonacci of</span>
                 <div>
@@ -21,21 +21,18 @@
                     <div id="alerty" class="alert alert-danger align-self-end d-none ">
                         Can't be larger than 50</div>
                 </div>
-                <button id="mybutton" class="btn btn-primary btn-sm me-2">Is</button>
-                <span id="display-result" class=" border-bottom fibonacciNumber"></span>
+                <button id="mybutton" class="btn btn-dark btn-sm me-2">Is</button>
+                <span id="display-result"></span>
                 <div id="spinn" class="spinner-border d-none" role="status"></div>
             </div>
-            <!-- <div class="container d-flex align-items-center my-3">
-                <input id="checkBox" type="checkbox" />
-                <span class="ms-2">Save Calculation</span>
-            </div> -->
-            <div class="container">
+
+            <div>
                 <div class="container d-flex align-items-center justify-content-start">
-                    <div class=" display-5 mt-2">Results</div>
+                    <h1>Results</h1>
                     <div id="spinny" class="spinner-border d-none " role="status"></div>
                 </div>
                 <div class="btn-group">
-                    <button class="btn btn-secondary  btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    <button class="btn btn-dark  btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">sort by</button>
                     <ul class="dropdown-menu">
                         <li id="dropdown-1"><a class="dropdown-item border-bottom" href="#">Number asc</a></li>
