@@ -1,3 +1,3 @@
 const config = {
-  API_ENDPOINT: "http://localhost:5050/",
+  API_ENDPOINT: "https://fibonacci-server.vercel.app/",
 };
