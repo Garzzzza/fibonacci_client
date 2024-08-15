@@ -18,10 +18,18 @@ body {
 .alert {
   padding: 0;
   margin: 0;
+  width: 90%;
+}
+#inputAndAlertDiv {
+  display: flex;
+  flex-direction: column;
+  width: 16vw;
+  align-items: center;
+  justify-content: center;
 }
 
 .inputfield {
-  width: 16vw;
+  width: 90%;
   color: black;
 }
 

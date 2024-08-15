@@ -27,34 +27,26 @@ function hideSpinny() {
   spinny.removeAttribute("class");
   spinny.setAttribute("class", "spinner-border d-none");
 }
-function showAlert() {
+function showAlert(errorText) {
   alerty.removeAttribute("class");
-  alerty.setAttribute("class", "alert alert-danger align-self-end");
+  alerty.setAttribute("class", "alert alert-danger");
   grabInput.removeAttribute("class");
-  grabInput.setAttribute(
-    "class",
-    "mx-2 inputfield align-self-start alert alert-danger"
-  );
+  grabInput.setAttribute("class", "mx-2 inputfield  alert alert-danger");
+  alerty.textContent = "Error:" + " " + errorText;
+  grabOutput.textContent = "";
 }
 function hideAlert() {
   alerty.removeAttribute("class");
-  alerty.setAttribute("class", "alert alert-danger align-self-end d-none");
+  alerty.setAttribute("class", "alert alert-danger  d-none");
   grabInput.removeAttribute("class");
-  grabInput.setAttribute("class", "mx-2 inputfield align-self-start");
+  grabInput.setAttribute("class", "mx-2 inputfield ");
   grabOutput.textContent = "";
-}
-function showError(errorText) {
-  grabOutput.removeAttribute("class");
-  grabOutput.setAttribute("class", "border-bottom fibonacciNumber text-danger");
-  grabOutput.textContent = "Server Error: " + errorText;
-}
-function hideError() {
-  grabOutput.removeAttribute("class");
-  grabOutput.setAttribute("class", "border-bottom fibonacciNumber");
-  grabOutput.textContent = "";
+  alerty.textContent = "";
 }
 
-async function serverCalculator() {
+async function calculate() {
+  hideAlert();
+  showSpinner();
   try {
     const response = await axios.get(
       config.API_ENDPOINT + "fibonacci/" + grabInput.value
@@ -62,22 +54,11 @@ async function serverCalculator() {
     grabOutput.textContent = response.data.result;
   } catch (error) {
     console.log(error);
-    showError(error.response.data);
+    showAlert(error.response.data);
   } finally {
     hideSpinner();
+    fibList(dateDesc);
   }
-}
-
-async function calculate() {
-  hideError();
-  hideAlert();
-  if (grabInput.value <= 50 && grabInput.value > -1) {
-    showSpinner();
-    serverCalculator();
-  } else {
-    showAlert();
-  }
-  fibList(dateDesc);
 }
 
 async function fibList(sortFunc) {
