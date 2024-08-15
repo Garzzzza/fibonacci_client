@@ -1,8 +1,8 @@
 let spinner = document.getElementById("spinn");
 let spinny = document.getElementById("spinny");
-let alerty = document.getElementById("alerty");
+let alerty = document.querySelector(".alert");
 let checkBox = document.getElementById("checkBox");
-const grabInput = document.getElementById("fib-input");
+let grabInput = document.querySelector(".inputfield");
 const grabOutput = document.getElementById("display-result");
 const grabButton = document.getElementById("mybutton");
 let listFib = document.getElementById("list-fib");
@@ -41,6 +41,7 @@ function hideAlert() {
   alerty.setAttribute("class", "alert alert-danger align-self-end d-none");
   grabInput.removeAttribute("class");
   grabInput.setAttribute("class", "mx-2 inputfield align-self-start");
+  grabOutput.textContent = "";
 }
 function showError(errorText) {
   grabOutput.removeAttribute("class");
@@ -50,6 +51,7 @@ function showError(errorText) {
 function hideError() {
   grabOutput.removeAttribute("class");
   grabOutput.setAttribute("class", "border-bottom fibonacciNumber");
+  grabOutput.textContent = "";
 }
 
 async function serverCalculator() {
@@ -58,24 +60,24 @@ async function serverCalculator() {
       config.API_ENDPOINT + "fibonacci/" + grabInput.value
     );
     grabOutput.textContent = response.data.result;
-    hideError();
   } catch (error) {
     console.log(error);
-    showError(error);
+    showError(error.response.data);
   } finally {
     hideSpinner();
   }
 }
 
 async function calculate() {
+  hideError();
+  hideAlert();
   if (grabInput.value <= 50 && grabInput.value > -1) {
     showSpinner();
     serverCalculator();
-    hideAlert();
   } else {
     showAlert();
   }
-  fibList();
+  fibList(dateDesc);
 }
 
 async function fibList(sortFunc) {
@@ -136,7 +138,10 @@ function dateDesc(a, b) {
   }
 }
 
-addEventListener("load", () => fibList(dateDesc));
+addEventListener("load", () => {
+  grabInput.value = "";
+  fibList(dateDesc);
+});
 grabButton.addEventListener("click", calculate);
 dropDown1.addEventListener("click", () => fibList(numberAsc));
 dropDown2.addEventListener("click", () => fibList(numberDesc));

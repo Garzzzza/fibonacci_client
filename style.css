@@ -1,39 +1,35 @@
 * {
-    padding: 0;
-    margin: 0;
-    color: rgb(216, 205, 205);
-    font-size: 1.5vw;
-    text-decoration: none;
+  padding: 0;
+  margin: 0;
+  color: rgb(216, 205, 205);
+  font-size: 1.5vw;
+  text-decoration: none;
 }
 
 body {
-    background-color: black;
+  background-color: black;
 }
 
-#alerty {
-    font-size: 10px;
-    padding: 2px;
-    margin: 0;
-    position: absolute;
-    top: 110px;
-    left: 200px
+.mx-2 {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+}
+.alert {
+  padding: 0;
+  margin: 0;
 }
 
-#fib-input {
-    width: 70px;
-    background-color: black
-}
-
-.display-5 {
-    padding: 0;
-    margin: 0;
+.inputfield {
+  width: 16vw;
+  color: black;
 }
 
 .container {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 h1 {
-    font-size: 4vw;
+  font-size: 4vw;
 }

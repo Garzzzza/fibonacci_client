@@ -2,3 +2,4 @@ node_modules
 fibonacciLocalConfig.js
 fibonacciDeployedConfig.js
 fibonacciServerConfig.js
+.env
